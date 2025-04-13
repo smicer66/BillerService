@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  biller-service-db:
+    image: 'postgres:13.1-alpine'
+    container_name: biller-service-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=chelsea
+  biller-service:
+    image: 'biller-service-docker:latest'
+    build:
+      context: .
+    container_name: biller-service
+    depends_on:
+      - biller-service-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://biller-service-db:5432/billerservice
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=chelsea
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  
